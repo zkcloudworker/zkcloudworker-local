@@ -1,0 +1,16 @@
+{
+  "name": "zkcloudworker-local",
+  "version": "0.1.0",
+  "author": "DFST",
+  "scripts": {
+    "start": "ts-node start.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.3"
+  },
+  "packageManager": "yarn@4.1.1",
+  "dependencies": {
+    "o1js": "^0.17.0",
+    "zkcloudworker": "^0.2.8"
+  }
+}
