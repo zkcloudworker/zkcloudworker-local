@@ -5,7 +5,7 @@ import { execSync } from "child_process";
 
 export async function unzipAndInstallDependencies(
   projectName: any,
-  _targetDir: any
+  _targetDir: any,
 ): Promise<string> {
   const targetDir = path.join(_targetDir);
   const unzipFileName = `${projectName}.zip`;
