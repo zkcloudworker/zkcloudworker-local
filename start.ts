@@ -113,8 +113,6 @@ async function unzipAndInstallDependencies(projectName: any): Promise<string> {
   } catch (error) {
     console.log(error)
   }
-
-  
 }
 
 main().catch((error) => {
