@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "author": "DFST",
   "scripts": {
-    "start": "ts-node start.ts"
+    "start": "npx tsx start.ts"
   },
   "devDependencies": {
     "tsx": "^4.7.2",
