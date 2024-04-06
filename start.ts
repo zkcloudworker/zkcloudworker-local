@@ -25,7 +25,6 @@ export async function main() {
     jobStatus: "started",
     maxAttempts: 0,
   } as JobData;
-  console.log("job:", job);
   const cloud = new LocalCloud({ job, chain: "local" });
 
   const projectDirPath = "folder2";
@@ -39,6 +38,7 @@ export async function main() {
     sourceDir,
     targetDir,
   ).catch(console.error);
+  console.log(zipFileName)
   const currentDir = await unzipAndInstallDependencies(
     job.repo,
     targetDir,

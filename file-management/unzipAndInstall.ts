@@ -14,23 +14,23 @@ export async function unzipAndInstallDependencies(
 
   try {
     await fs
-      .createReadStream(zipFilePath)
-      .pipe(unzipper.Extract({ path: extractPath }))
-      .promise();
-
-    console.log(`File unzipped to: ${extractPath}`);
-
-    process.chdir(extractPath);
-    const currentDir = process.cwd();
-    console.log(`Current directory: ${process.cwd()}`);
-
-    console.log("Installing dependencies...");
-    execSync("yarn", { stdio: "inherit" });
-
-    console.log("Dependencies installed successfully.");
-
-    return currentDir.toString();
+    .createReadStream(zipFilePath)
+    .pipe(unzipper.Extract({ path: extractPath }))
+    .promise();
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
+  
+  console.log(`File unzipped to: ${extractPath}`);
+
+  process.chdir(extractPath);
+  const currentDir = process.cwd();
+  console.log(`Current directory: ${process.cwd()}`);
+
+  console.log("Installing dependencies...");
+  execSync("yarn", { stdio: "inherit" });
+
+  console.log("Dependencies installed successfully.");
+
+  return currentDir.toString();
 }
