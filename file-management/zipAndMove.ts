@@ -2,6 +2,21 @@ import fs from "fs";
 import path from "path";
 import archiver from "archiver";
 
+async function deleteFolderRecursive(path: any) {
+  if( fs.existsSync(path) ) {
+      fs.readdirSync(path).forEach(function(file) {
+        var curPath = path + "/" + file;
+          if(fs.lstatSync(curPath).isDirectory()) { // recurse
+              deleteFolderRecursive(curPath);
+          } else { // delete file
+              fs.unlinkSync(curPath);
+          }
+      });
+      fs.rmdirSync(path);
+    }
+};
+
+
 export async function zipAndMoveProject(
   projectName: any,
   _sourceDir: any,
@@ -15,13 +30,15 @@ export async function zipAndMoveProject(
   const filePath = path.join(targetDir, projectName);
   const targetZipPath = path.join(targetDir, zipFileName)
 
+  console.log(filePath)
+
   if (fs.existsSync(zipFilePath)) {
     fs.unlinkSync(zipFilePath);
     console.log(`Existing zip file deleted: ${zipFilePath}`);
   }
 
   if (fs.existsSync(filePath)) {
-    fs.unlinkSync(filePath);
+    deleteFolderRecursive(filePath);
     console.log(`Existing zip file deleted: ${filePath}`);
   }
 

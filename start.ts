@@ -38,7 +38,7 @@ export async function main() {
     sourceDir,
     targetDir,
   ).catch(console.error);
-  console.log(zipFileName)
+
   const currentDir = await unzipAndInstallDependencies(
     job.repo,
     targetDir,
