@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "author": "DFST",
   "scripts": {
-    "start": "npx tsx start.ts"
+    "start": "npx tsx start.ts",
+    "format": "prettier --write ."
   },
   "devDependencies": {
+    "prettier": "^3.2.5",
     "tsx": "^4.7.2",
     "typescript": "^5.4.3"
   },

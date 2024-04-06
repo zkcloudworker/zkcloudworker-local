@@ -1,0 +1,35 @@
+import fs from "fs";
+import path from "path";
+import unzipper from "unzipper";
+import { execSync } from "child_process";
+
+export async function unzipAndInstallDependencies(
+  projectName: any,
+): Promise<string> {
+  const targetDir = path.join(__dirname, "../../folder2");
+  const unzipFileName = `${projectName}.zip`;
+  const zipFilePath = path.join(targetDir, unzipFileName);
+  const extractPath = path.join(targetDir, projectName);
+
+  try {
+    await fs
+      .createReadStream(zipFilePath)
+      .pipe(unzipper.Extract({ path: extractPath }))
+      .promise();
+
+    console.log(`File unzipped to: ${extractPath}`);
+
+    process.chdir(extractPath);
+    const currentDir = process.cwd();
+    console.log(`Current directory: ${process.cwd()}`);
+
+    console.log("Installing dependencies...");
+    execSync("yarn", { stdio: "inherit" });
+
+    console.log("Dependencies installed successfully.");
+
+    return currentDir.toString();
+  } catch (error) {
+    console.log(error);
+  }
+}
