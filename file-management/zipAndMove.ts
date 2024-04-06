@@ -2,12 +2,16 @@ import fs from "fs";
 import path from "path";
 import archiver from "archiver";
 
-export async function zipAndMoveProject(projectName: any) {
-  const sourceDir = path.join(__dirname, `../${projectName}`);
-  const targetDir = path.join(__dirname, "../../folder2");
+export async function zipAndMoveProject(
+  projectName: any,
+  _sourceDir: any,
+  _targetDir: any,
+) {
+  const sourceDir = path.join(_sourceDir);
+  const targetDir = path.join(_targetDir);
   const zipFileName = `${projectName}.zip`;
   const zipFilePath = path.join(sourceDir, zipFileName);
-  const filePath = path.join(sourceDir, projectName);
+  const filePath = path.join(targetDir, projectName);
 
   if (fs.existsSync(zipFilePath)) {
     fs.unlinkSync(zipFilePath);

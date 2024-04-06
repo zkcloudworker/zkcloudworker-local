@@ -1,8 +1,10 @@
+import path from "path";
 import {
   zipAndMoveProject,
   unzipAndInstallDependencies,
 } from "./file-management";
 import { LocalCloud, JobData } from "zkcloudworker";
+import { execSync } from "child_process";
 
 export async function main() {
   console.log("executing zkCloudWorker code...");
@@ -27,9 +29,21 @@ export async function main() {
   console.log("job:", job);
   const cloud = new LocalCloud({ job, chain: "local" });
 
+  const projectDirPath = "folder2";
+  const currDir = process.cwd();
+  const sourceDir = path.dirname(currDir);
+  const targetDir = path.join(path.dirname(sourceDir), projectDirPath)
+
+  console.log("Folder1:  ", sourceDir)
+  console.log("Folder2: ", targetDir)
+
   // Zipping and moving
-  const zipFileName = await zipAndMoveProject(job.repo).catch(console.error);
-  const currentDir = await unzipAndInstallDependencies(job.repo).catch(
+  const zipFileName = await zipAndMoveProject(
+    job.repo,
+    sourceDir,
+    targetDir,
+  ).catch(console.error);
+  const currentDir = await unzipAndInstallDependencies(job.repo, targetDir).catch(
     console.error,
   );
 
