@@ -31,17 +31,18 @@ export async function main() {
   const currDir = process.cwd();
   const sourceDir = path.dirname(currDir);
   const targetDir = path.join(path.dirname(sourceDir), projectDirPath);
+  //const currentDir = targetDir + "/simple-example";
 
   // Zipping and moving
   const zipFileName = await zipAndMoveProject(
     job.repo,
     sourceDir,
-    targetDir,
+    targetDir
   ).catch(console.error);
 
   const currentDir = await unzipAndInstallDependencies(
     job.repo,
-    targetDir,
+    targetDir
   ).catch(console.error);
 
   console.log("Importing worker from:", currentDir);

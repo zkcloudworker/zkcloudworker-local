@@ -4,6 +4,7 @@
   "author": "DFST",
   "scripts": {
     "start": "npx tsx start.ts",
+    "start1": "ts-node start.ts",
     "format": "prettier --write ."
   },
   "devDependencies": {
