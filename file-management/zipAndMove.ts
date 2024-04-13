@@ -30,7 +30,11 @@ export async function zipAndMoveProject(
   const filePath = path.join(targetDir, projectName);
   const targetZipPath = path.join(targetDir, zipFileName)
 
-  console.log(filePath)
+  //console.log(filePath)
+  if (!fs.existsSync(targetDir)){
+    fs.mkdirSync(targetDir);
+    console.log(`Created targetDir: ${targetDir}`);
+  }
 
   if (fs.existsSync(zipFilePath)) {
     fs.unlinkSync(zipFilePath);
