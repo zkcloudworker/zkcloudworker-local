@@ -1,12 +1,14 @@
 import path from "path";
-import {
-  zipAndMoveProject,
-  unzipAndInstallDependencies,
-} from "./file-management";
 import { LocalCloud, JobData } from "zkcloudworker";
 
-export async function main() {
-  console.log("executing zkCloudWorker code...");
+export async function main(args: string[]) {
+  const projectDir = args[0];
+
+  console.log("Executing zkCloudWorker code...");
+  const currDir = process.cwd();
+  const workerDir = path.join(path.dirname(currDir), projectDir);
+  console.log(`Worker dir: ${workerDir}`);
+
   const functionName = "zkcloudworker";
   const timeCreated = Date.now();
   const job: JobData = {
@@ -27,25 +29,8 @@ export async function main() {
   } as JobData;
   const cloud = new LocalCloud({ job, chain: "local" });
 
-  const projectDirPath = "folder2";
-  const currDir = process.cwd();
-  const sourceDir = path.dirname(currDir);
-  const targetDir = path.join(path.dirname(sourceDir), projectDirPath);
-
-  // Zipping and moving
-  const zipFileName = await zipAndMoveProject(
-    job.repo,
-    sourceDir,
-    targetDir,
-  ).catch(console.error);
-
-  const currentDir = await unzipAndInstallDependencies(
-    job.repo,
-    targetDir,
-  ).catch(console.error);
-
-  console.log("Importing worker from:", currentDir);
-  const zkcloudworker = await import(currentDir);
+  console.log("Importing worker from:", workerDir);
+//  const zkcloudworker = await import(workerDir);
   console.log("Getting zkCloudWorker object...");
 
   const worker = await zkcloudworker[functionName](cloud);
@@ -54,6 +39,6 @@ export async function main() {
   console.log("Job result:", result);
 }
 
-main().catch((error) => {
+main(process.argv.slice(2)).catch((error) => {
   console.error(error);
 });
