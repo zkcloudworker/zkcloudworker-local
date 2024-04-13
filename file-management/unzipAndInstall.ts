@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import unzipper from "unzipper";
 import { execSync } from "child_process";
+import config from "../deploy.config";
 
 export async function unzipAndInstallDependencies(
   projectName: any,
@@ -28,9 +29,7 @@ export async function unzipAndInstallDependencies(
   console.log(`Current directory: ${process.cwd()}`);
 
   console.log("Installing dependencies...");
-  execSync("yarn", { stdio: "inherit" });
-  //execSync("yarn install", { stdio: "inherit" });
-  //execSync("pnpm install", { stdio: "inherit" });
+  execSync(config.installScript, { stdio: "inherit" });
 
   console.log("Dependencies installed successfully.");
 

@@ -12,7 +12,7 @@ export async function main(args: string[]) {
   console.log("Building zkCloudWorker code...");
   const currDir = process.cwd();
   const sourceDir = path.dirname(currDir);
-  //const targetDir = path.join(path.dirname(sourceDir), projectDirPath);
+  // const targetDir = path.join(path.dirname(sourceDir), projectDirPath);
   const targetDir = path.join(path.dirname(currDir), projectDirPath);
   console.log(`Source repo: ${path.join(sourceDir, repo)}`);
   console.log(`Target dir: ${targetDir}`);

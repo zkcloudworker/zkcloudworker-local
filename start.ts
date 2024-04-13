@@ -30,7 +30,7 @@ export async function main(args: string[]) {
   const cloud = new LocalCloud({ job, chain: "local" });
 
   console.log("Importing worker from:", workerDir);
-//  const zkcloudworker = await import(workerDir);
+  const zkcloudworker = await import(workerDir);
   console.log("Getting zkCloudWorker object...");
 
   const worker = await zkcloudworker[functionName](cloud);
