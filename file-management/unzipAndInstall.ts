@@ -29,6 +29,8 @@ export async function unzipAndInstallDependencies(
 
   console.log("Installing dependencies...");
   execSync("yarn", { stdio: "inherit" });
+  //execSync("yarn install", { stdio: "inherit" });
+  //execSync("pnpm install", { stdio: "inherit" });
 
   console.log("Dependencies installed successfully.");
 
