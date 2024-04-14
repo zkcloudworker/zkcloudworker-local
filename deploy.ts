@@ -1,3 +1,4 @@
+import config from "./deploy.config"
 import path from "path";
 import {
   zipAndMoveProject,
@@ -7,13 +8,13 @@ import { LocalCloud, JobData } from "zkcloudworker";
 
 export async function main(args: string[]) {
   const repo = args[0]; // "simple-example"
-  const projectDirPath = args[1]; // "folder10";
+  const projectDirPath = args[1] || repo; // "folder10";
 
   console.log("Building zkCloudWorker code...");
   const currDir = process.cwd();
   const sourceDir = path.dirname(currDir);
   // const targetDir = path.join(path.dirname(sourceDir), projectDirPath);
-  const targetDir = path.join(path.dirname(currDir), projectDirPath);
+  const targetDir = path.join(config.buildDir || sourceDir, projectDirPath);
   console.log(`Source repo: ${path.join(sourceDir, repo)}`);
   console.log(`Target dir: ${targetDir}`);
 
@@ -32,6 +33,10 @@ export async function main(args: string[]) {
   console.log(`Worker deployed to: ${currentDir}`)
 }
 
+/**
+ * @param repo - the source code repo name 
+ * @param targetDir - the folder where we will deploy the worker
+ */
 main(process.argv.slice(2)).catch((error) => {
   console.error(error);
 });
