@@ -82,3 +82,16 @@ Job result: {
   "proof": "KChzdGF0ZW1l...KSkp"
 }
 ~~~
+
+## Config options
+
+The file `deploy.config.ts` contains the deploy options:
+
+- `installScript`: the script that it will use to install the worker dependencies. You can use your preferred package mgr command: `yarn install`, `pnpm install`or `npm install`. 
+    Note that it is now configured to use `yarn`.
+- `workersDir`: the folder (relative to your working dir) where we will locally deploy the workers.
+  Note that it is now configured to use `workers` so the worker will be created in this folder.
+
+
+
+
