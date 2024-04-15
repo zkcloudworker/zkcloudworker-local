@@ -36,6 +36,7 @@ export async function main(args: string[]) {
 
   const worker = await zkcloudworker[functionName](cloud);
   console.log("Executing job...");
+  console.log("Job:", JSON.stringify(job, null, 2));
   const result = await worker.execute();
   console.log("Job result:", result);
 }
