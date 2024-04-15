@@ -1,8 +1,9 @@
 import path from "path";
+import config from "./deploy.config";
 import { LocalCloud, JobData } from "zkcloudworker";
 
 export async function main(args: string[]) {
-  const projectDir = args[0];
+  const projectDir = path.join(config.workersDir, args[0]);
 
   console.log("Executing zkCloudWorker code...");
   const currDir = process.cwd();

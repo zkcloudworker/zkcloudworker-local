@@ -8,15 +8,14 @@ import { LocalCloud, JobData } from "zkcloudworker";
 
 export async function main(args: string[]) {
   const repo = args[0]; // "simple-example"
-  const projectDirPath = args[1] || repo; // "folder10";
+  const projectDirPath = args[1] || path.join(config.workersDir);
 
   console.log("Building zkCloudWorker code...");
   const currDir = process.cwd();
   const sourceDir = path.dirname(currDir);
-  // const targetDir = path.join(path.dirname(sourceDir), projectDirPath);
-  const targetDir = path.join(config.buildDir || sourceDir, projectDirPath);
+  const targetDir = path.join(sourceDir, projectDirPath);
   console.log(`Source repo: ${path.join(sourceDir, repo)}`);
-  console.log(`Target dir: ${targetDir}`);
+  console.log(`Target dir: ${targetDir}/${repo}`);
 
   // Zipping and moving
   const zipFileName = await zipAndMoveProject(
