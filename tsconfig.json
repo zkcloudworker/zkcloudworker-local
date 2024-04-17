@@ -14,6 +14,6 @@
     "strictPropertyInitialization": false,
     "moduleResolution": "node"
   },
-  "include": ["*.ts", "*.json", "file-management"],
+  "include": ["*.ts", "*.json", "src/file-management", "src/deployWorker.ts"],
   "exclude": ["node_modules"]
 }
