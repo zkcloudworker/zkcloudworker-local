@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import unzipper from "unzipper";
 import { execSync } from "child_process";
-import config from "../deploy.config";
+import config from "../../deploy.config";
 
 export async function unzipAndInstallDependencies(
   projectName: any,

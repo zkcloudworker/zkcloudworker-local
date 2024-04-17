@@ -1,6 +1,6 @@
 import path from "path";
 import config from "./deploy.config";
-import { LocalCloud, JobData } from "zkcloudworker";
+import { LocalCloud, JobData, zkCloudWorker } from "zkcloudworker";
 
 export async function main(args: string[]) {
   const projectDir = path.join(config.workersDir, args[0]);
@@ -28,11 +28,12 @@ export async function main(args: string[]) {
     jobStatus: "started",
     maxAttempts: 0,
   } as JobData;
-  const cloud = new LocalCloud({ job, chain: "local" });
-
+  
   console.log("Importing worker from:", workerDir);
   const zkcloudworker = await import(workerDir);
   console.log("Getting zkCloudWorker object...");
+  
+  const cloud = new LocalCloud({ job, chain: "local", localWorker: zkcloudworker });
 
   const worker = await zkcloudworker[functionName](cloud);
   console.log("Executing job...");
