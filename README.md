@@ -3,25 +3,23 @@
 ## Installation
 
 You need to install node and git
-and clone this repo and simple-example repo:
+and clone this repo and the examples repos:
 
 ```
 git clone https://github.com/zkcloudworker/zkcloudworker-local
 git clone https://github.com/zkcloudworker/simple-example
-cd simple-example
-yarn
-cd ../zkcloudworker-local
-yarn
+git clone https://github.com/zkcloudworker/encryption-example
 ```
 
 ## Deploy the example
 
-From the zkcloudworker-local folder, run:
+From the `zkcloudworker-local` folder, run:
 ```
 yarn deploy simple-example
+yarn deploy encryption-example
 ```
 
-The output will be:
+The output will be (depending on the selected example) something like:
 ~~~
 Building zkCloudWorker code...
 Source repo: ../simple-example
@@ -45,14 +43,15 @@ Dependencies installed successfully.
 Worker deployed to: ../workers/simple-example
 ~~~
 
-## Running the example
+## Running the examples
 
-From the zkcloudworker-local folder, run:
+From the `zkcloudworker-local` folder, run:
 ```
 yarn start simple-example
+yarn start encryption-example
 ```
 
-The output would be:
+The output would be (depending on the example) something like:
 ~~~
 Importing worker from: ../workers/simple-example
 Getting zkCloudWorker object...
@@ -91,7 +90,3 @@ The file `deploy.config.ts` contains the deploy options:
     Note that it is now configured to use `yarn`.
 - `workersDir`: the folder (relative to your working dir) where we will locally deploy the workers.
   Note that it is now configured to use `workers` so the worker will be created in this folder.
-
-
-
-
