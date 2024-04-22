@@ -5,8 +5,8 @@
   "scripts": {
     "start": "npx tsx start.ts",
     "deploy": "npx tsx deploy.ts",
-    "start1": "ts-node start.ts",
-    "test": "npx jest",
+    "start-encrypted": "npx tsx encryption-example.ts encryption-example",
+    "test": "npx jest --runInBand",
     "format": "prettier --write ."
   },
   "devDependencies": {
