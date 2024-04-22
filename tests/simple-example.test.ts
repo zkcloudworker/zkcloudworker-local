@@ -7,7 +7,8 @@ describe('Deploy and run `simple-example`', () => {
   
   const exampleRepo = 'simple-example';
   let workersDir: string | void = "";
-  let exampleFactory: any;
+  let zkcloudworker: any;
+  let localCloud: any;
 
   beforeAll(async () => {});
 
@@ -15,16 +16,17 @@ describe('Deploy and run `simple-example`', () => {
     workersDir = await deployWorker([exampleRepo], config);;    
   });
 
-  it('import the worker factory', async () => {
+  it('import the worker', async () => {
     // const currDir = process.cwd();
     // const projectDir = path.join(config.workersDir, exampleRepo);
     // const workersDir = path.join(currDir, projectDir);
     console.log("Importing worker factory from:", workersDir);
     console.log("this should expose a 'createWorker() method");
-    exampleFactory = await import(workersDir!);
+    const example = await import(workersDir!);
+    zkcloudworker = example.zkcloudworker;
   });
 
-  it('executes method on worker', async () => {
+  it('create `local` context', async () => {
     console.log("Getting zkCloudWorker object...");
     const timeCreated = Date.now();
     const job: JobData = {
@@ -45,13 +47,15 @@ describe('Deploy and run `simple-example`', () => {
     } as JobData;
     console.log("Job:", JSON.stringify(job, null, 2));
 
-    const cloud = new LocalCloud({ 
+    localCloud = new LocalCloud({ 
       job, 
       chain: "local", 
-      localWorker: exampleFactory.createWorker 
+      localWorker: zkcloudworker 
     });
-    const worker = await exampleFactory.createWorker(cloud);
+  });
 
+  it('execute method on worker', async () => {
+    const worker = await zkcloudworker(localCloud);
     console.log("Executing job...");
     const result = await worker.execute();
   });
