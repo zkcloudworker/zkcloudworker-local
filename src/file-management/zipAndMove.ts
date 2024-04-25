@@ -3,24 +3,25 @@ import path from "path";
 import archiver from "archiver";
 
 async function deleteFolderRecursive(path: any) {
-  if( fs.existsSync(path) ) {
-      fs.readdirSync(path).forEach(function(file) {
-        var curPath = path + "/" + file;
-          if(fs.lstatSync(curPath).isDirectory()) { // recurse
-              deleteFolderRecursive(curPath);
-          } else { // delete file
-              fs.unlinkSync(curPath);
-          }
-      });
-      fs.rmdirSync(path);
-    }
-};
-
+  if (fs.existsSync(path)) {
+    fs.readdirSync(path).forEach(function (file) {
+      var curPath = path + "/" + file;
+      if (fs.lstatSync(curPath).isDirectory()) {
+        // recurse
+        deleteFolderRecursive(curPath);
+      } else {
+        // delete file
+        fs.unlinkSync(curPath);
+      }
+    });
+    fs.rmdirSync(path);
+  }
+}
 
 export async function zipAndMoveProject(
   projectName: any,
   _sourceDir: any,
-  _targetDir: any,
+  _targetDir: any
 ) {
   const sourceDir = path.join(_sourceDir);
   const globDir = path.join(sourceDir, `./${projectName}`);
@@ -28,9 +29,12 @@ export async function zipAndMoveProject(
   const zipFileName = `${projectName}.zip`;
   const zipFilePath = path.join(sourceDir, zipFileName);
   const filePath = path.join(targetDir, projectName);
-  const targetZipPath = path.join(targetDir, zipFileName)
+  const targetZipPath = path.join(targetDir, zipFileName);
 
-  console.log(filePath)
+  if (!fs.existsSync(targetDir)){
+    fs.mkdirSync(targetDir);
+    console.log(`Created buildsDir: ${targetDir}`);
+  }
 
   if (fs.existsSync(zipFilePath)) {
     fs.unlinkSync(zipFilePath);
@@ -39,12 +43,12 @@ export async function zipAndMoveProject(
 
   if (fs.existsSync(filePath)) {
     deleteFolderRecursive(filePath);
-    console.log(`Existing zip file deleted: ${filePath}`);
+    console.log(`Existing target dir deleted: ${filePath}`);
   }
 
   if (fs.existsSync(targetZipPath)) {
     fs.unlinkSync(targetZipPath);
-    console.log(`Existing zip file deleted: ${targetZipPath}`)
+    console.log(`Existing target zip file deleted: ${targetZipPath}`);
   }
 
   const output = fs.createWriteStream(zipFilePath);
@@ -61,7 +65,8 @@ export async function zipAndMoveProject(
 
   await archive.glob("**/*", {
     cwd: globDir,
-    ignore: ["node_modules/**", "yarn.lock"],
+    ignore: ["node_modules/**", "yarn.lock", ".yarn/**"],
+    dot: true,
   });
 
   await new Promise((resolve, reject) => {

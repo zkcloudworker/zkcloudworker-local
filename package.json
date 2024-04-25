@@ -4,18 +4,26 @@
   "author": "DFST",
   "scripts": {
     "start": "npx tsx start.ts",
+    "deploy": "npx tsx deploy.ts",
+    "start-encrypted": "npx tsx encryption-example.ts encryption-example",
+    "test": "npx jest --runInBand",
     "format": "prettier --write ."
   },
   "devDependencies": {
+    "@types/archiver": "^6.0.2",
+    "@types/jest": "^29.5.12",
+    "jest": "^29.7.0",
     "prettier": "^3.2.5",
+    "ts-jest": "^29.1.2",
     "tsx": "^4.7.2",
-    "typescript": "^5.4.3"
+    "typescript": "^5.4.5"
   },
   "packageManager": "yarn@4.1.1",
   "dependencies": {
+    "@types/unzipper": "^0.10.9",
     "archiver": "^7.0.1",
-    "o1js": "^0.17.0",
+    "o1js": "^0.18.0",
     "unzipper": "^0.10.14",
-    "zkcloudworker": "^0.2.8"
+    "zkcloudworker": "^0.3.8"
   }
 }
