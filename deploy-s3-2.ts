@@ -27,8 +27,9 @@ async function main() {
     console.log("No jobId found in result");
     return;
   }
-  if( jobId.success === false ) {
-
+  if  (result.success === false ) {
+    throw Error("Error deploying "+result);
+  }  
   const waitResult = await api.waitForJobResult({ jobId });
   console.log("deploy result", waitResult);
 }

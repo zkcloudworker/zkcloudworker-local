@@ -5,7 +5,10 @@ import {
 } from "./file-management";
 import { LocalCloud, JobData } from "zkcloudworker";
 
-export async function deployWorkerToS3(config: any): Promise<string | void> {
+export async function deployWorkerToS3(  
+  args: string[], 
+  config: any
+): Promise<string | void> {
   const repo = "simple-example";
   const projectDirPath = path.join(config.workersDir);
 

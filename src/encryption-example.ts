@@ -1,16 +1,24 @@
 import path from "path";
-import { PrivateKey, PublicKey } from "o1js";
-import config from "../deploy.config";
+import { PrivateKey, PublicKey, initializeBindings } from "o1js";
 import { LocalCloud, JobData } from "zkcloudworker";
+import config from "../deploy.config";
+import { listen } from "./nats-client"
 
-export async function run(args: string[]) {
-  const projectDir = path.join(config.workersDir, args[0]);
+async function startNATSClient() {
+  // create some client address, this will be done by 
+  // the web API BEFORE calling a worker
+  const clientSecret = PrivateKey.random();
+  let clientAddress = clientSecret.toPublicKey().toBase58();
+  console.log("Cliente address ", clientAddress);
 
-  console.log("Executing zkCloudWorker "+projectDir);
-  const currDir = process.cwd();
-  const workerDir = path.join(path.dirname(currDir), projectDir);
-  console.log(`Worker dir: ${workerDir}`);
+   // now subscribe and listen in this Address
+   // we use the 'zkcw' prefix for zkCloudWorkers subscriptions
+  await listen(`zkcw:${clientAddress}`);
 
+  return clientAddress;
+}
+
+async function runWorker(workerDir: string, clientAddress: string) {
   const functionName = "zkcloudworker";
   const timeCreated = Date.now();
   const job: JobData = {
@@ -20,7 +28,7 @@ export async function run(args: string[]) {
     repo: "simple-example",
     task: "example",
     userId: "userId",
-    args: undefined, // using param 'encrypedPayload' when execute()
+    args: clientAddress, // using param 'encrypedPayload' when execute()
     metadata: "encryption-example",
     txNumber: 1,
     timeCreated,
@@ -34,37 +42,38 @@ export async function run(args: string[]) {
   const { zkcloudworker } = await import(workerDir);
 
   console.log("Getting zkCloudWorker object...");
-  const localCloud = new LocalCloud({ job, chain: "local", localWorker: zkcloudworker });
-
-  // create some client address, this will be done by 
-  // the web API when calling a worker
-  const clientSecret = PrivateKey.random();
-  const clientAddress = clientSecret.toPublicKey().toBase58();
-  console.log("Cliente address ", clientAddress);
+  const localCloud = new LocalCloud({ 
+    job, 
+    chain: "local", 
+    localWorker: zkcloudworker 
+  });
 
   // create the worker instance and bind it to this client
-  const worker = await zkcloudworker(localCloud, clientAddress);
+  const worker = await zkcloudworker(localCloud);
   console.log("Created worker instance ", worker);
-
-  // get the worker's public key so we can encrypt the payload
-  const workerAddress = worker.getAddress();
-  console.log("Worker address: ", workerAddress);
-
-  // encrypt the  payload 
-  const encryptedPayload = worker.encrypt(
-    JSON.stringify({ value: Math.ceil(Math.random() * 100).toString() }),
-    workerAddress
-  );
-  console.log("Encrypted payload: ", encryptedPayload);
 
   // now we can execute 
   console.log("Executing job...");
-  const encryptedResult = await worker.execute(encryptedPayload);
+  const encryptedResult = await worker.execute();
 
-  // decrypt the received result, using the client private key
-  const result = worker.decrypt(
-    encryptedResult,
-    clientSecret.toBase58()
-  )
-  console.log("Decrypted result: ", result)
+  return encryptedResult;
+}
+
+export async function run(args: string[]) {
+  const projectDir = path.join(config.workersDir, args[0]);
+  console.log("Executing zkCloudWorker "+projectDir);
+  const currDir = process.cwd();
+  const workerDir = path.join(path.dirname(currDir), projectDir);
+  console.log(`Worker dir: ${workerDir}`);
+
+  // start a NATS client to simulate the web API calling the worker
+  // the caller web API instance will have a unique publicKey 
+  let clientAddress = await startNATSClient();
+
+  // we call the worker sending the caller's publicKey 
+  // the worker will use it to send messages to the web API instance
+  // and will encrypt responses from the worker to the web API instance
+  let encryptedResult = await runWorker(workerDir, clientAddress); 
+
+  console.log("Encrypted result: ", encryptedResult);
 }
