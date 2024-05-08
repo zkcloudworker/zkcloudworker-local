@@ -17,7 +17,11 @@ export async function unzipAndInstallDependencies(
     await fs
     .createReadStream(zipFilePath)
     .pipe(unzipper.Extract({ path: extractPath }))
-    .promise();
+    .promise()
+    .catch(err  => {
+      console.error('Error unzipping file:', err);
+      throw err;
+    });
   } catch (error) {
     console.log(error)
   }

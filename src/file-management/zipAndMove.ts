@@ -65,7 +65,7 @@ export async function zipAndMoveProject(
 
   await archive.glob("**/*", {
     cwd: globDir,
-    ignore: ["node_modules/**", "yarn.lock", ".yarn/**"],
+    ignore: ["node_modules/**", "yarn.lock", ".yarn/**", "dist/**"],
     dot: true,
   });
 
