@@ -29,8 +29,9 @@ async function main() {
   }
   if( jobId.success === false ) {
 
-  const waitResult = await api.waitForJobResult({ jobId });
-  console.log("deploy result", waitResult);
+    const waitResult = await api.waitForJobResult({ jobId });
+    console.log("deploy result", waitResult);
+  }
 }
 
 main().catch((error) => {
